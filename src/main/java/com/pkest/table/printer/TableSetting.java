@@ -48,8 +48,8 @@ public class TableSetting {
     private TableLineAlign headerLineAlign = TableLineAlign.CENTER;     //header上下对齐方式
     private String lineSplit = "\n";                                    //分割字符
     private Map<String, String> escapeChars = new HashMap();            //转义字符
-    private TableBorder outside = new TableBorder('-', '|', '+');  //外边框
-    private TableBorder inside = new TableBorder('-', '|', '+');   //内边框
+    private TableBorder outside = new TableBorder('-', '|', '+');       //外边框
+    private TableBorder inside = new TableBorder('-', '|', '+');        //内边框
     private final Splitter lineSplitter = Splitter.on(lineSplit);
     private final Splitter hexSplitter = Splitter.fixedLength(2);
     private final Joiner hexByteJoiner = Joiner.on(' ');

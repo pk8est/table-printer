@@ -46,13 +46,14 @@ public class TablePrinter {
 
     private final static Logger logger = LoggerFactory.getLogger(TablePrinter.class);
 
-    public static TablePrinter DEFAULT = TablePrinter.build(TableSetting.build().withShowNo(false));
-    public static TablePrinter FULL = TablePrinter.build(TableSetting.build());
-    public static TablePrinter SIMPLE = TablePrinter.build(TableSetting.build()
+    public final static TablePrinter DEFAULT = TablePrinter.build(TableSetting.build().withShowNo(false));
+    public final static TablePrinter FULL = TablePrinter.build(TableSetting.build());
+    public final static TablePrinter SIMPLE = TablePrinter.build(TableSetting.build()
             .withShowHeader(false)
             .withOutside(null)
+            .withOutside(null)
             .withShowNo(false));
-    public static TablePrinter CSV = TablePrinter.build(TableSetting.build()
+    public final static TablePrinter CSV = TablePrinter.build(TableSetting.build()
             .withShowNo(false)
             .withPadding(0)
             .withLineSplit(null)
