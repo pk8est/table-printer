@@ -15,7 +15,6 @@ package com.pkest.table.printer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -26,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -71,7 +69,7 @@ public class TablePrinter {
     public TableSetting copySetting() {
         TableSetting setting = new TableSetting();
         try {
-            BeanUtils.copyProperties(this.setting, setting);
+            BeanUtils.copyProperties(setting, this.setting);
         } catch (Exception e) {
             logger.warn(e.getMessage());
         }
@@ -191,7 +189,7 @@ public class TablePrinter {
 
 
     protected List initHeader(Object row){
-        List headers = Lists.newArrayList();
+        List headers;
         if(row instanceof String[]){
             headers = Arrays.asList((String[])row);
         }else if (row instanceof Collection) {
@@ -214,8 +212,13 @@ public class TablePrinter {
             data = (List) rawData;
         }else if(rawData instanceof Map){
             data = ((Map<?, ?>) rawData).entrySet().stream()
-                    .map((Map.Entry e) -> Lists.newArrayList(e.getKey(), e.getValue()))
+                    .map(e -> Lists.newArrayList(e.getKey(), e.getValue()))
                     //.flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+        }else if(!(rawData instanceof String) && !isWrapClass(rawData.getClass())){
+            Map<?, ?> map = new BeanMap(rawData);
+            data = map.entrySet().stream()
+                    .map(e -> Lists.newArrayList(e.getKey(), e.getValue()))
                     .collect(Collectors.toList());
         }else{
             data = Lists.newArrayList(rawData);

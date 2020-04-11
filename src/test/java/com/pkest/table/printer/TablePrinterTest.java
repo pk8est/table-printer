@@ -36,37 +36,10 @@ public class TablePrinterTest {
     }
 
     @Test
-    public void test() throws IOException {
-        List list = Lists.newArrayList(
-                Lists.newArrayList(1, "name", "test"),
-                Lists.newArrayList(1, "name", "test"),
-                Lists.newArrayList(1, "name", "test")
-        );
-        List map = Lists.newArrayList(
-                ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
-                ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
-                ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst")
-        );
-
-        TableSetting setting = TableSetting.build()
-                .withShowNo(false)
-                .withPadding(0)
-                .withLineSplit(null)
-                .withMaxColWidth(-1)
-                .appendEscapeChars("\n", "\\\\n")
-                .withTextAlign(TableTextAlign.LEFT)
-                .withEquilong(false)
-                .withInside(new TableBorder(' ', ',', ' '))
-                .withOutside(null);
-        System.out.println(TablePrinter.DEFAULT.render(map, setting));
-        //System.out.println(TablePrinter.DEFAULT.render(map, TableSetting.SHOW_HEADER | TableSetting.SHOW_NO));
-    }
-
-    @Test
     public void printSimple() throws IOException {
         TableSetting setting = TablePrinter.DEFAULT.copySetting().withShowHeader(false);
         System.out.println(TablePrinter.DEFAULT.render(listData.get(0), setting));
-        System.out.println(TablePrinter.DEFAULT.render(mapData.get(0), TableSetting.NOT_SHOW_HEADER).toString());
+        System.out.println(TablePrinter.DEFAULT.render(mapData.get(0), TableSetting.NOT_SHOW_HEADER | TableSetting.NOT_SHOW_NO).toString());
         //System.out.println(TablePrinter.DEFAULT.render(TableSetting.build(), false).toString());
     }
 
@@ -99,6 +72,41 @@ public class TablePrinterTest {
         TablePrinter.SIMPLE.render(mapData, writer);
         writer.flush();
 
+    }
+
+    @Test
+    public void printSimpleObject() throws IOException {
+        TableSetting setting = TablePrinter.DEFAULT.copySetting();
+        System.out.println(TablePrinter.DEFAULT.render(setting, TableSetting.NOT_SHOW_HEADER).toString());
+        //System.out.println(TablePrinter.FULL.render(Lists.newArrayList(setting, setting), Lists.newArrayList("lineSplit", "padding", "equilong", "hexByteJoiner")).toString());
+
+    }
+
+    @Test
+    public void testSetting() throws IOException {
+        List list = Lists.newArrayList(
+                Lists.newArrayList(1, "name", "test"),
+                Lists.newArrayList(1, "name", "test"),
+                Lists.newArrayList(1, "name", "test")
+        );
+        List map = Lists.newArrayList(
+                ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
+                ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
+                ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst")
+        );
+
+        TableSetting setting = TableSetting.build()
+                .withShowNo(false)
+                .withPadding(0)
+                .withLineSplit(null)
+                .withMaxColWidth(-1)
+                .appendEscapeChars("\n", "\\\\n")
+                .withTextAlign(TableTextAlign.LEFT)
+                .withEquilong(false)
+                .withInside(new TableBorder(' ', ',', ' '))
+                .withOutside(null);
+        System.out.println(TablePrinter.DEFAULT.render(map, setting));
+        //System.out.println(TablePrinter.DEFAULT.render(map, TableSetting.SHOW_HEADER | TableSetting.SHOW_NO));
     }
 
 }

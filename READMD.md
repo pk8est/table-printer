@@ -137,7 +137,7 @@ System.out.println(TablePrinter.DEFAULT.render(map, setting));
 private int padding = 1;  //左右边距默认为1
 private Character encase = null;
 private boolean equilong = true;//默认等宽
-private int maxColWidth = 100;
+private int maxColWidth = 250;
 private boolean showHeader = true;
 private boolean showNo = true;
 private boolean wordWrap = true; // 自动换行

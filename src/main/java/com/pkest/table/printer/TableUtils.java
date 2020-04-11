@@ -1,15 +1,7 @@
 package com.pkest.table.printer;
 
-import com.google.common.base.Splitter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.apache.commons.beanutils.BeanMap;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 360733598@qq.com
@@ -17,16 +9,6 @@ import java.util.Map;
  */
 public class TableUtils {
 
-    final static Gson gson = TableUtils.setupGson();
-
-    public static Gson getGson() {
-        return gson;
-    }
-
-    private static Gson setupGson() {
-        GsonBuilder builder = new GsonBuilder();
-        return builder.create();
-    }
 
     public static List<String> splitStringByLength(String inputString, int length) {
         int size = inputString.length() / length;
