@@ -24,6 +24,29 @@ TablePrinter myPrinter = TablePrinter.build(TableSetting.build()
 myPrinter.render(list);                      
 ```
 
+### 可以设置的属性
+```$xslt
+private int padding = 1;                                            //左右边距
+private Character encase = null;                                    //包含
+private boolean equilong = true;                                    //默认等宽
+private int maxColWidth = 250;                                      //最大列宽
+private boolean showHeader = true;                                  //显示header
+private boolean showNo = true;                                      //显示序列号
+private String sequenceName = "No.";                                //序列号header
+private boolean wordWrap = true;                                    //自动换行
+
+private TableTextAlign textAlign = TableTextAlign.CENTER;           //对齐方式
+private TableLineAlign lineAlign = TableLineAlign.CENTER;           //上下对齐方式
+private TableTextAlign headerTextAlign = TableTextAlign.CENTER;     //header对齐方式
+private TableLineAlign headerLineAlign = TableLineAlign.CENTER;     //header上下对齐方式
+private String lineSplit = "\n";                                    //分割字符
+private Map<String, String> escapeChars = new HashMap();            //转义字符
+private TableBorder outside = new TableBorder('-', '|', '+');       //外边框
+private TableBorder inside = new TableBorder('-', '|', '+');        //内边框
+
+#所有属性可以通过withXxx(value)的方式进过DSL链式设值
+```
+
 ### 元素是列表
 ```
 List list = Lists.newArrayList(
@@ -195,29 +218,6 @@ System.out.println(TablePrinter.DEFAULT.render(map, setting));
  name_1,10,tessssssssssst 
  name_1,10,tessssssssssst 
  name_1,10,tessssssssssst 
-```
-
-### 可以设置的属性
-```$xslt
-private int padding = 1;  //左右边距默认为1
-private Character encase = null;
-private boolean equilong = true;//默认等宽
-private int maxColWidth = 250;
-private boolean showHeader = true;
-private boolean showNo = true;
-private boolean wordWrap = true; // 自动换行
-private String sequenceName = "No."; // 自动换行
-
-private TableTextAlign textAlign = TableTextAlign.CENTER; // 对齐方式
-private TableLineAlign lineAlign = TableLineAlign.CENTER; // 上下对齐方式
-private TableTextAlign headerTextAlign = TableTextAlign.CENTER; // 对齐方式
-private TableLineAlign headerLineAlign = TableLineAlign.CENTER; // 上下对齐方式
-private String lineSplit = "\n";
-private Map<String, String> escapeChars = new HashMap();
-private TableBorder outside = new TableBorder('-', '|', '+');
-private TableBorder inside = new TableBorder('-', '|', '+');
-
-#所有属性可以通过withXxx(value)的方式进过DSL链式设值
 ```
 
 ### 自定义writer输出

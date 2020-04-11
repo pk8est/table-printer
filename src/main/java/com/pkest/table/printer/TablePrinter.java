@@ -205,7 +205,7 @@ public class TablePrinter {
                     .map(String::valueOf).collect(Collectors.toList());
         }else if(row instanceof Map){
             headers = (List<String>) ((Map) row).keySet().stream().collect(Collectors.toList());
-        }else if(row == null || row instanceof String || isWrapClass(row.getClass())){
+        }else if(row == null || row instanceof String || TableUtils.isWrapClass(row.getClass())){
             headers = Lists.newArrayList(1);
         }else{
             headers = new BeanMap(row).keySet().stream().collect(Collectors.toList());
@@ -225,7 +225,7 @@ public class TablePrinter {
                     .map(e -> Lists.newArrayList(e.getKey(), e.getValue()))
                     //.flatMap(Collection::stream)
                     .collect(Collectors.toList());
-        }else if(!(rawData instanceof String) && !isWrapClass(rawData.getClass())){
+        }else if(!(rawData instanceof String) && !TableUtils.isWrapClass(rawData.getClass())){
             Map<?, ?> map = new BeanMap(rawData);
             data = map.entrySet().stream()
                     .map(e -> Lists.newArrayList(e.getKey(), e.getValue()))
@@ -258,7 +258,7 @@ public class TablePrinter {
             data.addAll((Collection) headers.stream()
                     .map(e -> map.containsKey(e) ? map.get(e) : null)
                     .collect(Collectors.toList()));
-        }else if(row == null || row instanceof String || isWrapClass(row.getClass())){
+        }else if(row == null || row instanceof String || TableUtils.isWrapClass(row.getClass())){
             data.add(row);
         }else{
             data.addAll(new BeanMap(row).entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()));
@@ -370,10 +370,10 @@ public class TablePrinter {
         }
 
         if(encase != null){
-            o = encase + escape(o.toString(), String.valueOf(encase), "\\"+encase) + encase;
+            o = encase + TableUtils.escape(o.toString(), String.valueOf(encase), "\\"+encase) + encase;
         }
         for (Map.Entry<String, String> character: setting.getEscapeChars().entrySet()){
-            o = escape(o.toString(), character.getKey(), character.getValue());
+            o = TableUtils.escape(o.toString(), character.getKey(), character.getValue());
         }
 
         return o.toString();
@@ -439,21 +439,6 @@ public class TablePrinter {
             n += max(wcwidth(plain.charAt(i)), 0);
         }
         return n;
-    }
-
-    protected String escape(String input, String encase, String replace){
-        if(StringUtils.isNotBlank(input)){
-            return input.replace(encase, replace);
-        }
-        return input;
-    }
-
-    protected static boolean isWrapClass(Class clz) {
-        try {
-            return ((Class) clz.getField("TYPE").get(null)).isPrimitive();
-        } catch (Exception e) {
-            return false;
-        }
     }
 
 }

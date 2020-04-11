@@ -1,5 +1,7 @@
 package com.pkest.table.printer;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,21 @@ public class TableUtils {
             return str.substring(f);
         } else {
             return str.substring(f, t);
+        }
+    }
+
+    public static String escape(String input, String encase, String replace){
+        if(StringUtils.isNotBlank(input)){
+            return input.replace(encase, replace);
+        }
+        return input;
+    }
+
+    public static boolean isWrapClass(Class clz) {
+        try {
+            return ((Class) clz.getField("TYPE").get(null)).isPrimitive();
+        } catch (Exception e) {
+            return false;
         }
     }
 
