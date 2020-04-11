@@ -72,6 +72,7 @@ System.out.println(TablePrinter.DEFAULT.render(map));
 | name_1 | 10  | tessssssssssst |
 +--------+-----+----------------+
 
+
 //只打印name, age列
 System.out.println(TablePrinter.DEFAULT.render(map, Lists.newArrayList("name", "age"))); 
 +--------+-----+
@@ -84,6 +85,56 @@ System.out.println(TablePrinter.DEFAULT.render(map, Lists.newArrayList("name", "
 | name_1 | 10  |
 +--------+-----+
 
+```
+### 元素是bean
+```$xslt
+TableSetting setting = TablePrinter.DEFAULT.copySetting();
+System.out.println(TablePrinter.DEFAULT.render(setting, TableSetting.NOT_SHOW_HEADER));
+// output
++-----------------+----------------------------------------------+
+|    lineSplit    |                                              |
+|                 |                                              |
++-----------------+----------------------------------------------+
+|     padding     |                      1                       |
++-----------------+----------------------------------------------+
+|    equilong     |                     true                     |
++-----------------+----------------------------------------------+
+|  hexByteJoiner  |    com.google.common.base.Joiner@147ed70f    |
++-----------------+----------------------------------------------+
+|    textAlign    |                    CENTER                    |
++-----------------+----------------------------------------------+
+|   showHeader    |                     true                     |
++-----------------+----------------------------------------------+
+|    wordWrap     |                     true                     |
++-----------------+----------------------------------------------+
+| headerTextAlign |                    CENTER                    |
++-----------------+----------------------------------------------+
+|  hexLineJoiner  |    com.google.common.base.Joiner@61dd025     |
++-----------------+----------------------------------------------+
+|   escapeChars   |                      {}                      |
++-----------------+----------------------------------------------+
+|  lineSplitter   |   com.google.common.base.Splitter@124c278f   |
++-----------------+----------------------------------------------+
+|     inside      | com.pkest.table.printer.TableBorder@15b204a1 |
++-----------------+----------------------------------------------+
+|  sequenceName   |                     No.                      |
++-----------------+----------------------------------------------+
+|     encase      |                     NULL                     |
++-----------------+----------------------------------------------+
+| headerLineAlign |                    CENTER                    |
++-----------------+----------------------------------------------+
+|     showNo      |                    false                     |
++-----------------+----------------------------------------------+
+|    lineAlign    |                    CENTER                    |
++-----------------+----------------------------------------------+
+|     outside     | com.pkest.table.printer.TableBorder@77167fb7 |
++-----------------+----------------------------------------------+
+|   hexSplitter   |   com.google.common.base.Splitter@1fe20588   |
++-----------------+----------------------------------------------+
+|   maxColWidth   |                     250                      |
++-----------------+----------------------------------------------+
+|      class      |  class com.pkest.table.printer.TableSetting  |
++-----------------+----------------------------------------------+
 ```
 
 ### 简单设置
