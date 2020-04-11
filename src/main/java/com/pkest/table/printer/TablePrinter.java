@@ -85,64 +85,70 @@ public class TablePrinter {
         this.setting = setting;
     }
 
-    public Writer dump(Object rawData)throws IOException{
+    public Writer dump(Object rawData){
         return dump(rawData, new StringWriter());
     }
 
-    public Writer dump(Object rawData, Writer writer)throws IOException{
+    public Writer dump(Object rawData, Writer writer){
         return render(rawData, writer, TableSetting.NOT_SHOW_HEADER | TableSetting.NOT_SHOW_NO);
     }
 
-    public Writer render(Object rawData)throws IOException{
+    public Writer render(Object rawData){
         return render(rawData, new StringWriter());
     }
 
-    public Writer render(Object rawData, Writer writer)throws IOException{
+    public Writer render(Object rawData, Writer writer){
         return render(rawData, null, writer);
     }
 
-    public Writer render(Object rawData, List headers)throws IOException{
+    public Writer render(Object rawData, List headers){
         return render(rawData, headers, new StringWriter());
     }
 
-    public Writer render(Object rawData, long flags)throws IOException{
+    public Writer render(Object rawData, long flags){
         return render(rawData, new StringWriter(), flags);
     }
 
-    public Writer render(Object rawData, TableSetting setting)throws IOException{
+    public Writer render(Object rawData, TableSetting setting){
         return render(rawData, null, new StringWriter(), 0, setting);
     }
 
-    public Writer render(Object rawData, List headers, long flags)throws IOException{
+    public Writer render(Object rawData, List headers, long flags){
         return render(rawData, headers, new StringWriter(), flags, this.setting);
     }
 
-    public Writer render(Object rawData, List headers, Writer writer)throws IOException{
+    public Writer render(Object rawData, List headers, Writer writer){
         return render(rawData, headers, writer, 0, this.setting);
     }
 
-    public Writer render(Object rawData, Writer writer, long flags)throws IOException{
+    public Writer render(Object rawData, Writer writer, long flags){
         return render(rawData, null, writer, flags, this.setting);
     }
 
-    public Writer render(Object rawData, List headers, Writer writer, long flags, TableSetting setting)throws IOException{
+    public Writer render(Object rawData, List headers, Writer writer, long flags, TableSetting setting){
         List<List> rows = null;
-        List data =transformData(rawData);
-        setting.initFlags(flags);
-        if(data != null && data.size() > 0){
-            if(headers == null) headers = initHeader(data.get(0));
-            rows = initData(data, headers, setting);
+        try {
+            List data =transformData(rawData);
+            setting.initFlags(flags);
+            if(data != null && data.size() > 0){
+                if(headers == null) headers = initHeader(data.get(0));
+                rows = initData(data, headers, setting);
+            }
+            if(setting.isShowNo()){
+                headers.add(0, setting.getSequenceName());
+            }
+            Integer[] maxWidth = mathMaxWidth(rows, headers, setting);
+            writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getOutside(), setting), writer::append);
+            if(setting.isShowHeader()){
+                renderRow(headers, headers, maxWidth, setting.getHeaderTextAlign(), setting.getHeaderLineAlign(), writer, setting);
+                writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getInside(), setting), writer::append);
+            }
+            renderBody(rows, headers, maxWidth, writer, setting);
+        }catch (IOException e){
+            logger.error("", e);
+            throw new RuntimeException(e);
         }
-        if(setting.isShowNo()){
-            headers.add(0, setting.getSequenceName());
-        }
-        Integer[] maxWidth = mathMaxWidth(rows, headers, setting);
-        writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getOutside(), setting), writer::append);
-        if(setting.isShowHeader()){
-            renderRow(headers, headers, maxWidth, setting.getHeaderTextAlign(), setting.getHeaderLineAlign(), writer, setting);
-            writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getInside(), setting), writer::append);
-        }
-        renderBody(rows, headers, maxWidth, writer, setting);
+
         return writer;
     }
 
