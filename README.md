@@ -1,4 +1,7 @@
 # table-printer
+
+* 一个通用的打印表格工具
+
 ## 使用
 
 ### 已经定义好的printer
@@ -135,6 +138,17 @@ System.out.println(TablePrinter.DEFAULT.render(setting, TableSetting.NOT_SHOW_HE
 +-----------------+----------------------------------------------+
 |      class      |  class com.pkest.table.printer.TableSetting  |
 +-----------------+----------------------------------------------+
+```
+
+### dump
+```$xslt
+TableSetting setting = TablePrinter.DEFAULT.copySetting();
+System.out.println(TablePrinter.DEFAULT.dump(null));
+System.out.println(TablePrinter.DEFAULT.dump(setting));
+System.out.println(TablePrinter.DEFAULT.dump(1));
+System.out.println(TablePrinter.DEFAULT.dump("string"));
+System.out.println(TablePrinter.DEFAULT.dump(Lists.newArrayList("x", "xx")));
+System.out.println(TablePrinter.DEFAULT.dump(ImmutableMap.of("id", 1, "name", "xx")));
 ```
 
 ### 简单设置

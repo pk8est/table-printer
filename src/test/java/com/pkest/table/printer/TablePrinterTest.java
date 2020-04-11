@@ -77,9 +77,21 @@ public class TablePrinterTest {
     @Test
     public void printSimpleObject() throws IOException {
         TableSetting setting = TablePrinter.DEFAULT.copySetting();
-        System.out.println(TablePrinter.DEFAULT.render(setting, TableSetting.NOT_SHOW_HEADER).toString());
+        System.out.println(TablePrinter.DEFAULT.render(setting, TableSetting.NOT_SHOW_HEADER));
+        System.out.println(TablePrinter.DEFAULT.dump(setting));
         //System.out.println(TablePrinter.FULL.render(Lists.newArrayList(setting, setting), Lists.newArrayList("lineSplit", "padding", "equilong", "hexByteJoiner")).toString());
 
+    }
+
+    @Test
+    public void printDump() throws IOException {
+        TableSetting setting = TablePrinter.DEFAULT.copySetting();
+        System.out.println(TablePrinter.DEFAULT.dump(null));
+        System.out.println(TablePrinter.DEFAULT.dump(setting));
+        System.out.println(TablePrinter.DEFAULT.dump(1));
+        System.out.println(TablePrinter.DEFAULT.dump("string"));
+        System.out.println(TablePrinter.DEFAULT.dump(Lists.newArrayList("x", "xx")));
+        System.out.println(TablePrinter.DEFAULT.dump(ImmutableMap.of("id", 1, "name", "xx")));
     }
 
     @Test

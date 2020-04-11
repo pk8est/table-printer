@@ -84,6 +84,14 @@ public class TablePrinter {
         this.setting = setting;
     }
 
+    public Writer dump(Object rawData)throws IOException{
+        return dump(rawData, new StringWriter());
+    }
+
+    public Writer dump(Object rawData, Writer writer)throws IOException{
+        return render(rawData, writer, TableSetting.NOT_SHOW_HEADER | TableSetting.NOT_SHOW_NO);
+    }
+
     public Writer render(Object rawData)throws IOException{
         return render(rawData, new StringWriter());
     }
@@ -197,7 +205,7 @@ public class TablePrinter {
                     .map(String::valueOf).collect(Collectors.toList());
         }else if(row instanceof Map){
             headers = (List<String>) ((Map) row).keySet().stream().collect(Collectors.toList());
-        }else if(isWrapClass(row.getClass())){
+        }else if(row == null || row instanceof String || isWrapClass(row.getClass())){
             headers = Lists.newArrayList(1);
         }else{
             headers = new BeanMap(row).keySet().stream().collect(Collectors.toList());
@@ -208,7 +216,9 @@ public class TablePrinter {
 
     protected List<List> transformData(Object rawData) {
         List data;
-        if(rawData instanceof List){
+        if(rawData == null) {
+            data = Lists.newArrayList(rawData);
+        }else if(rawData instanceof List){
             data = (List) rawData;
         }else if(rawData instanceof Map){
             data = ((Map<?, ?>) rawData).entrySet().stream()
@@ -248,7 +258,7 @@ public class TablePrinter {
             data.addAll((Collection) headers.stream()
                     .map(e -> map.containsKey(e) ? map.get(e) : null)
                     .collect(Collectors.toList()));
-        }else if(row instanceof String || isWrapClass(row.getClass())){
+        }else if(row == null || row instanceof String || isWrapClass(row.getClass())){
             data.add(row);
         }else{
             data.addAll(new BeanMap(row).entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()));
