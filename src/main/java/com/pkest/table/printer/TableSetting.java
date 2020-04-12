@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * @author 360733598@qq.com
@@ -46,11 +47,11 @@ public class TableSetting {
     private TableLineAlign lineAlign = TableLineAlign.CENTER;           //上下对齐方式
     private TableTextAlign headerTextAlign = TableTextAlign.CENTER;     //header对齐方式
     private TableLineAlign headerLineAlign = TableLineAlign.CENTER;     //header上下对齐方式
-    private String lineSplit = "\n";                                    //分割字符
+    private String lineSplit = "\n|\r\n";                               //分割字符
     private Map<String, String> escapeChars = new HashMap();            //转义字符
     private TableBorder outside = new TableBorder('-', '|', '+');       //外边框
     private TableBorder inside = new TableBorder('-', '|', '+');        //内边框
-    private final Splitter lineSplitter = Splitter.on(lineSplit);
+    private final Splitter lineSplitter = Splitter.on(Pattern.compile(lineSplit));
     private final Splitter hexSplitter = Splitter.fixedLength(2);
     private final Joiner hexByteJoiner = Joiner.on(' ');
     private final Joiner hexLineJoiner = Joiner.on(lineSplit);

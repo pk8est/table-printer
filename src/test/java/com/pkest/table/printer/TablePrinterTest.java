@@ -24,7 +24,7 @@ public class TablePrinterTest {
     @Before
     public void setUp(){
         listData = Lists.newArrayList(
-                Lists.newArrayList(1, "tessss\nsss\nsssst\nessss\nessss\nessss\nessss\nessss\nessss\nessss",1, "tessssss\nssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst"),
+                Lists.newArrayList(1, "tessss\r\nsss\nsssst\nessss\nessss\nessss\nessss\nessss\nessss\nessss",1, "tessssss\nssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst"),
                 Lists.newArrayList(1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst"),
                 Lists.newArrayList(1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessss'ssssssst")
         );
