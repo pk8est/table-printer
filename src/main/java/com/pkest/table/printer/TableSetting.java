@@ -37,7 +37,7 @@ public class TableSetting {
     private int padding = 1;                                            //左右边距
     private Character encase = null;                                    //包含
     private boolean equilong = true;                                    //默认等宽
-    private int maxColWidth = 250;                                      //最大列宽
+    private int maxColWidth = 150;                                      //最大列宽
     private boolean showHeader = true;                                  //显示header
     private boolean showNo = true;                                      //显示序列号
     private String sequenceName = "No.";                                //序列号header

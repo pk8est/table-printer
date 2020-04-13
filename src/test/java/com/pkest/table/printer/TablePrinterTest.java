@@ -26,7 +26,7 @@ public class TablePrinterTest {
         listData = Lists.newArrayList(
                 Lists.newArrayList(1, "tessss\r\nsss\nsssst\nessss\nessss\nessss\nessss\nessss\nessss\nessss",1, "tessssss\nssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst"),
                 Lists.newArrayList(1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst"),
-                Lists.newArrayList(1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessss'ssssssst")
+                Lists.newArrayList(1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessssssssssst",1, "tessss'sss\"sssst")
         );
         mapData = Lists.newArrayList(
                 ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
@@ -39,27 +39,33 @@ public class TablePrinterTest {
     public void printSimple() throws IOException {
         TableSetting setting = TablePrinter.DEFAULT.copySetting().withShowHeader(false);
         System.out.println(TablePrinter.DEFAULT.render(listData.get(0), setting));
-        System.out.println(TablePrinter.DEFAULT.render(mapData.get(0), TableSetting.NOT_SHOW_HEADER | TableSetting.NOT_SHOW_NO).toString());
+        System.out.println(TablePrinter.DEFAULT.render(mapData.get(0), TableSetting.NOT_SHOW_HEADER | TableSetting.NOT_SHOW_NO));
         //System.out.println(TablePrinter.DEFAULT.render(TableSetting.build(), false).toString());
     }
 
     @Test
     public void printList() throws IOException {
         System.out.println(TablePrinter.DEFAULT.render(listData).toString());
-        System.out.println(TablePrinter.CSV.render(listData, Lists.newArrayList(1, 2)).toString());
+        System.out.println(TablePrinter.CSV.render(listData, Lists.newArrayList(1, 2)));
     }
 
     @Test
     public void printMap() throws IOException {
-        System.out.println(TablePrinter.FULL.render(mapData).toString());
-        System.out.println(TablePrinter.DEFAULT.render(mapData, Lists.newArrayList("name", "age")).toString());
+        System.out.println(TablePrinter.FULL.render(mapData));
+        System.out.println(TablePrinter.DEFAULT.render(mapData, Lists.newArrayList("name", "age")));
+    }
+
+    @Test
+    public void printCsv() throws IOException {
+        System.out.println(TablePrinter.CSV.render(listData));
+        System.out.println(TablePrinter.CSV2.render(listData));
     }
 
     @Test
     public void printObject() throws IOException {
         TableSetting setting = TablePrinter.DEFAULT.copySetting();
-        System.out.println(TablePrinter.FULL.render(Lists.newArrayList(setting, setting)).toString());
-        System.out.println(TablePrinter.FULL.render(Lists.newArrayList(setting, setting), Lists.newArrayList("lineSplit", "padding", "equilong", "hexByteJoiner")).toString());
+        System.out.println(TablePrinter.FULL.render(Lists.newArrayList(setting, setting)));
+        System.out.println(TablePrinter.FULL.render(Lists.newArrayList(setting, setting), Lists.newArrayList("lineSplit", "padding", "equilong", "hexByteJoiner")));
     }
 
 

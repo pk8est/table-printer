@@ -11,6 +11,7 @@ TablePrinter.DEFAULT;
 TablePrinter.FULL;
 TablePrinter.SIMPLE;
 TablePrinter.CSV;
+TablePrinter.CSV2;
 
 // 使用
 TablePrinter.DEFAULT.render(list)
@@ -29,7 +30,7 @@ myPrinter.render(list);
 private int padding = 1;                                            //左右边距
 private Character encase = null;                                    //包含
 private boolean equilong = true;                                    //默认等宽
-private int maxColWidth = 250;                                      //最大列宽
+private int maxColWidth = 150;                                      //最大列宽
 private boolean showHeader = true;                                  //显示header
 private boolean showNo = true;                                      //显示序列号
 private String sequenceName = "No.";                                //序列号header
@@ -44,7 +45,7 @@ private Map<String, String> escapeChars = new HashMap();            //转义字�
 private TableBorder outside = new TableBorder('-', '|', '+');       //外边框
 private TableBorder inside = new TableBorder('-', '|', '+');        //内边框
 
-#所有属性可以通过withXxx(value)的方式进过DSL链式设值
+#所有属性可以通过withXxx(value)的方式进过链式设值
 ```
 
 ### 元素是列表
@@ -157,7 +158,7 @@ System.out.println(TablePrinter.DEFAULT.render(setting, TableSetting.NOT_SHOW_HE
 +-----------------+----------------------------------------------+
 |   hexSplitter   |   com.google.common.base.Splitter@1fe20588   |
 +-----------------+----------------------------------------------+
-|   maxColWidth   |                     250                      |
+|   maxColWidth   |                     150                      |
 +-----------------+----------------------------------------------+
 |      class      |  class com.pkest.table.printer.TableSetting  |
 +-----------------+----------------------------------------------+

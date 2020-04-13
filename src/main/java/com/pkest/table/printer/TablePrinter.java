@@ -59,11 +59,12 @@ public class TablePrinter {
             .withLineSplit(null)
             .withMaxColWidth(-1)
             .appendEscapeChars("\n", "\\\\n")
+            .appendEscapeChars("\r", "\\\\r")
             .withTextAlign(TableTextAlign.LEFT)
             .withEquilong(false)
-            .withInside(new TableBorder(' ', ',', ' '))
+            .withInside(new TableBorder(null, ',', null))
             .withOutside(null));
-
+    public final static TablePrinter CSV2 = TablePrinter.build(CSV.copySetting().withEncase('"'));
 
     private final TableSetting setting;
 
