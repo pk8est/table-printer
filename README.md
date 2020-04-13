@@ -27,7 +27,8 @@ myPrinter.render(list);
 
 ### 可以设置的属性
 ```$xslt
-private int padding = 1;                                            //左右边距
+private TableEdge padding = new TableEdge(0, 1);                    //内边距
+private TableEdge margin = new TableEdge(0);                        //外边距
 private Character encase = null;                                    //包含
 private boolean equilong = true;                                    //默认等宽
 private int maxColWidth = 150;                                      //最大列宽
@@ -199,11 +200,52 @@ System.out.println(TablePrinter.DEFAULT.render(map, TableSetting.SHOW_HEADER | T
 |  3  | name_1 | 10  | tessssssssssst |
 +-----+--------+-----+----------------+
 ```
+
+### 复杂的
+```$xslt
+List list = Lists.newArrayList(
+        Lists.newArrayList(1, "name", "test"),
+        Lists.newArrayList(1, "name", "test"),
+        Lists.newArrayList(1, "name", "test")
+);
+List map = Lists.newArrayList(
+        ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
+        ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
+        ImmutableMap.of("name", "name_1", "age", 10, "message",
+                TablePrinter.build(TablePrinter.DEFAULT.copySetting()
+                        .withMargin(new TableEdge(1, 5))) //设置外边距
+                        .render(list))
+);
+
+System.out.println(TablePrinter.DEFAULT.render(map));
+//output
++--------+-----+-------------------------------+
+|  name  | age |            message            |
++--------+-----+-------------------------------+
+| name_1 | 10  |        tessssssssssst         |
++--------+-----+-------------------------------+
+| name_1 | 10  |        tessssssssssst         |
++--------+-----+-------------------------------+
+|        |     |                               |
+|        |     |      +---+------+------+      |
+|        |     |      | 1 |  2   |  3   |      |
+|        |     |      +---+------+------+      |
+|        |     |      | 1 | name | test |      |
+| name_1 | 10  |      +---+------+------+      |
+|        |     |      | 1 | name | test |      |
+|        |     |      +---+------+------+      |
+|        |     |      | 1 | name | test |      |
+|        |     |      +---+------+------+      |
+|        |     |                               |
+|        |     |                               |
++--------+-----+-------------------------------+
+```
+
 ### 完整配置
 ```$xslt
 TableSetting setting = TableSetting.build()
             .withShowNo(false)
-            .withPadding(0)
+            .withPadding(null)
             .withLineSplit(null)
             .withMaxColWidth(-1)
             .appendEscapeChars("\n", "\\\\n")

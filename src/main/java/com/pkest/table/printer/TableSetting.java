@@ -34,21 +34,22 @@ public class TableSetting {
     public static final int TABLE_LINE_ALIGN_CENTER = 1 << 18;
     public static final int TABLE_LINE_ALIGN_BOTTOM = 1 << 19;
 
-    private int padding = 1;                                            //左右边距
-    private Character encase = null;                                    //包含
-    private boolean equilong = true;                                    //默认等宽
-    private int maxColWidth = 150;                                      //最大列宽
-    private boolean showHeader = true;                                  //显示header
-    private boolean showNo = true;                                      //显示序列号
-    private String sequenceName = "No.";                                //序列号header
-    private boolean wordWrap = true;                                    //自动换行
+    private TableEdge padding = new TableEdge(0, 1);   //内边距
+    private TableEdge margin = new TableEdge(0);                         //外边距
+    private Character encase = null;                                         //包含
+    private boolean equilong = true;                                         //默认等宽
+    private int maxColWidth = 150;                                           //最大列宽
+    private boolean showHeader = true;                                       //显示header
+    private boolean showNo = true;                                           //显示序列号
+    private String sequenceName = "No.";                                     //序列号header
+    private boolean wordWrap = true;                                         //自动换行
 
-    private TableTextAlign textAlign = TableTextAlign.CENTER;           //对齐方式
-    private TableLineAlign lineAlign = TableLineAlign.CENTER;           //上下对齐方式
-    private TableTextAlign headerTextAlign = TableTextAlign.CENTER;     //header对齐方式
-    private TableLineAlign headerLineAlign = TableLineAlign.CENTER;     //header上下对齐方式
-    private String lineSplit = "\n|\r\n";                               //分割字符
-    private Map<String, String> escapeChars = new HashMap();            //转义字符
+    private TableTextAlign textAlign = TableTextAlign.CENTER;                //对齐方式
+    private TableLineAlign lineAlign = TableLineAlign.CENTER;                //上下对齐方式
+    private TableTextAlign headerTextAlign = TableTextAlign.CENTER;          //header对齐方式
+    private TableLineAlign headerLineAlign = TableLineAlign.CENTER;          //header上下对齐方式
+    private String lineSplit = "\n|\r\n";                                    //分割字符
+    private Map<String, String> escapeChars = new HashMap();                 //转义字符
     private TableBorder outside = new TableBorder('-', '|', '+');       //外边框
     private TableBorder inside = new TableBorder('-', '|', '+');        //内边框
     private final Splitter lineSplitter = Splitter.on(Pattern.compile(lineSplit));
@@ -57,16 +58,29 @@ public class TableSetting {
     private final Joiner hexLineJoiner = Joiner.on(lineSplit);
 
 
-    public int getPadding() {
+    public TableEdge getPadding() {
         return padding;
     }
 
-    public void setPadding(int padding) {
+    public void setPadding(TableEdge padding) {
         this.padding = padding;
     }
 
-    public TableSetting withPadding(int padding) {
+    public TableSetting withPadding(TableEdge padding) {
         this.padding = padding;
+        return this;
+    }
+
+    public TableEdge getMargin() {
+        return margin;
+    }
+
+    public void setMargin(TableEdge margin) {
+        this.margin = margin;
+    }
+
+    public TableSetting withMargin(TableEdge margin) {
+        this.margin = margin;
         return this;
     }
 

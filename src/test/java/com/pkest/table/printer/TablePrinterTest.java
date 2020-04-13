@@ -110,20 +110,13 @@ public class TablePrinterTest {
         List map = Lists.newArrayList(
                 ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
                 ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst"),
-                ImmutableMap.of("name", "name_1", "age", 10, "message", "tessssssssssst")
+                ImmutableMap.of("name", "name_1", "age", 10, "message",
+                        TablePrinter.build(TablePrinter.DEFAULT.copySetting()
+                                .withMargin(new TableEdge(1, 5)))
+                                .render(list))
         );
 
-        TableSetting setting = TableSetting.build()
-                .withShowNo(false)
-                .withPadding(0)
-                .withLineSplit(null)
-                .withMaxColWidth(-1)
-                .appendEscapeChars("\n", "\\\\n")
-                .withTextAlign(TableTextAlign.LEFT)
-                .withEquilong(false)
-                .withInside(new TableBorder(' ', ',', ' '))
-                .withOutside(null);
-        System.out.println(TablePrinter.DEFAULT.render(map, setting));
+        System.out.println(TablePrinter.DEFAULT.render(map));
         //System.out.println(TablePrinter.DEFAULT.render(map, TableSetting.SHOW_HEADER | TableSetting.SHOW_NO));
     }
 

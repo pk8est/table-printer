@@ -51,11 +51,10 @@ public class TablePrinter {
     public final static TablePrinter SIMPLE = TablePrinter.build(TableSetting.build()
             .withShowHeader(false)
             .withOutside(null)
-            .withOutside(null)
             .withShowNo(false));
     public final static TablePrinter CSV = TablePrinter.build(TableSetting.build()
             .withShowNo(false)
-            .withPadding(0)
+            .withPadding(null)
             .withLineSplit(null)
             .withMaxColWidth(-1)
             .appendEscapeChars("\n", "\\\\n")
@@ -139,12 +138,24 @@ public class TablePrinter {
                 headers.add(0, setting.getSequenceName());
             }
             Integer[] maxWidth = mathMaxWidth(rows, headers, setting);
+
+            if(setting.getMargin() != null){
+                writer.append(repeat("\r\n", setting.getMargin().getTop()));
+            }
+
             writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getOutside(), setting), writer::append);
             if(setting.isShowHeader()){
                 renderRow(headers, headers, maxWidth, setting.getHeaderTextAlign(), setting.getHeaderLineAlign(), writer, setting);
                 writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getInside(), setting), writer::append);
             }
+            writer.flush();
             renderBody(rows, headers, maxWidth, writer, setting);
+
+            if(setting.getMargin() != null){
+                writer.append(repeat("\r\n", setting.getMargin().getBottom()));
+            }
+            writer.flush();
+
         }catch (IOException e){
             logger.error("", e);
             throw new RuntimeException(e);
@@ -160,6 +171,7 @@ public class TablePrinter {
             if(rowIndex < rows.size()-1){
                 writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getInside(), setting), writer::append);
             }
+            writer.flush();
             rowIndex++;
         }
 
@@ -171,13 +183,27 @@ public class TablePrinter {
         int columns = headers.size();
         List<List<String>> columnLines = new ArrayList<>(columns);
         int maxLines = 1;
+        TableEdge padding = setting.getPadding() == null ? new TableEdge(0) : setting.getPadding();
+        TableEdge margin = setting.getMargin() == null ? new TableEdge(0) : setting.getMargin();
+        int leftPadding = padding.getLeft();
+        int rightPadding = padding.getRihgt();
+        String leftMargin = repeat(" ", margin.getLeft());
+        String rightMargin = repeat(" ", margin.getRihgt());
+        List<String> topPadding = Stream.iterate(0, i->i+1).limit(padding.getTop())
+                .map(e -> "").collect(Collectors.toList());
+        List<String> bottomPadding = Stream.iterate(0, i->i+1).limit(padding.getBottom())
+                .map(e -> "").collect(Collectors.toList());
+
         for (int i = 0; i < columns; i++) {
             List<String> lines = wordWrapValue(formatValue(row.get(i), setting.getEncase(), setting), setting);
+            lines.addAll(0, topPadding);
+            lines.addAll(bottomPadding);
             columnLines.add(lines);
             maxLines = max(maxLines, lines.size());
         }
 
         for (int line = 0; line < maxLines; line++) {
+            writer.append(leftMargin);
             writerBorderSand(setting.getOutside(), setting.getInside(), TableBorder::getRowSplitter, writer::append);
             for (int column = 0; column < columns; column++) {
                 if(column > 0) {
@@ -194,10 +220,11 @@ public class TablePrinter {
                         break;
                 }
                 String s = line >= diff && (line - diff < lines.size()) ? lines.get(line - diff) : "";
-                String out = align(s, maxWidth[column], setting.getPadding(), textAlign);
+                String out = align(s, maxWidth[column], leftPadding, rightPadding, textAlign);
                 writer.append(out);
             }
             writerBorderSand(setting.getOutside(), setting.getInside(), TableBorder::getRowSplitter, writer::append);
+            writer.append(rightMargin);
             writer.append('\n');
 
         }
@@ -336,31 +363,39 @@ public class TablePrinter {
                 writerBorderSand(inside, outside, TableBorder::getCrossSplitter, writer::append);
             }
             writerBorderSand(inside, outside, TableBorder::getLineSplitter, s -> {
-                writer.append(repeat(String.valueOf(s), (width == -1 ? 1 : width) + setting.getPadding() * 2));
+                writer.append(repeat(String.valueOf(s), (width == -1 ? 1 : width)
+                        + setting.getPadding().getLeft() + setting.getPadding().getRihgt()));
             });
         }
 
         writerBorderSand(outside, inside, TableBorder::getCrossSplitter, writer::append);
 
-        return writer.toString();
+        String output = writer.toString();
+        if(StringUtils.isNotBlank(output) && setting.getMargin() != null){
+            return repeat(" ", setting.getMargin().getLeft())
+                    + output
+                    + repeat(" ", setting.getMargin().getRihgt());
+        }
+        return output;
+
     }
 
     protected void writerBorderSand(TableBorder currect, TableBorder compare,
-                                    Function<TableBorder, Character> get,
-                                    TableConsumer<Character, IOException> writer
+                                    Function<TableBorder, Object> get,
+                                    TableConsumer<String, IOException> writer
     ) throws IOException {
-        writerBorderSand(currect, compare, get, writer, ' ');
+        writerBorderSand(currect, compare, get, writer, " ");
     }
 
     protected void writerBorderSand(TableBorder currect, TableBorder compare,
-                                    Function<TableBorder, Character> get,
-                                    TableConsumer<Character, IOException> writer,
-                                    char defaultChar
+                                    Function<TableBorder, Object> get,
+                                    TableConsumer<String, IOException> writer,
+                                    String defaultChar
     ) throws IOException {
         if(currect != null) {
-            Character c = get.apply(currect);
+            Object c = get.apply(currect);
             if(c != null){
-                writer.accept(c);
+                writer.accept(c.toString());
             }
         } else if(currect == null && compare != null) {
             writer.accept(defaultChar);
@@ -400,32 +435,33 @@ public class TablePrinter {
         return setting.getHexSplitter().split(hexDump);
     }
 
-    protected String align(String s, int maxWidth, int padding, TableTextAlign align){
+    protected String align(String s, int maxWidth, int leftPadding, int rightPadding, TableTextAlign align){
         if(maxWidth < 0){
             maxWidth = s.length();
         }
         switch (align){
             case LEFT:
-                return align(s, maxWidth, padding, false);
+                return align(s, maxWidth, leftPadding, rightPadding, false);
             case RIGHT:
-                return align(s, maxWidth, padding, true);
+                return align(s, maxWidth, leftPadding, rightPadding, true);
             default:
-                return center(s, maxWidth, padding);
+                return center(s, maxWidth, leftPadding, rightPadding);
         }
     }
 
-    protected String center(String s, int maxWidth, int padding){
+    protected String center(String s, int maxWidth, int leftPadding, int rightPadding){
         int width = consoleWidth(s);
         int left = (maxWidth - width) / 2;
         int right = maxWidth - (left + width);
-        return repeat(" ", left + padding) + s + repeat(" ", right + padding);
+        return repeat(" ", left + leftPadding) + s + repeat(" ", right + rightPadding);
     }
 
-    protected String align(String s, int maxWidth, int padding, boolean right){
+    protected String align(String s, int maxWidth, int leftPadding, int rightPadding, boolean right){
         int width = consoleWidth(s);
-        String large = repeat(" ", (maxWidth - width) + padding);
-        String small = repeat(" ", padding);
-        return right ? (large + s + small) : (small + s + large);
+        String large = repeat(" ", (maxWidth - width));
+        return repeat(" ", leftPadding)
+                + (right ? (large + s) : (s + large))
+                + repeat(" ", rightPadding);
     }
 
     protected int maxLineLength(String s, TableSetting setting){
