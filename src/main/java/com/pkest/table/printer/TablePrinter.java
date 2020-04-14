@@ -148,13 +148,11 @@ public class TablePrinter {
                 renderRow(headers, headers, maxWidth, setting.getHeaderTextAlign(), setting.getHeaderLineAlign(), writer, setting);
                 writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getInside(), setting), writer::append);
             }
-            writer.flush();
             renderBody(rows, headers, maxWidth, writer, setting);
 
             if(setting.getMargin() != null){
                 writer.append(repeat("\r\n", setting.getMargin().getBottom()));
             }
-            writer.flush();
 
         }catch (IOException e){
             logger.error("", e);
@@ -171,7 +169,6 @@ public class TablePrinter {
             if(rowIndex < rows.size()-1){
                 writeLineWithNotBlank(formatBorder(maxWidth, setting.getOutside(), setting.getInside(), setting), writer::append);
             }
-            writer.flush();
             rowIndex++;
         }
 
