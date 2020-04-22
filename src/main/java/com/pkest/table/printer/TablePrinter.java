@@ -126,7 +126,7 @@ public class TablePrinter {
     }
 
     public Writer render(Object rawData, List headers, Writer writer, long flags, TableSetting setting){
-        List<List> rows = null;
+        List<List> rows = Lists.newArrayList();
         try {
             List data =transformData(rawData);
             setting.initFlags(flags);
