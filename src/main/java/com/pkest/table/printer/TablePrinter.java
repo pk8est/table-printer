@@ -455,7 +455,7 @@ public class TablePrinter {
 
     protected String align(String s, int maxWidth, int leftPadding, int rightPadding, boolean right){
         int width = consoleWidth(s);
-        String large = repeat(" ", (maxWidth - width));
+        String large = maxWidth - width > 0 ? repeat(" ", (maxWidth - width)) : "";
         return repeat(" ", leftPadding)
                 + (right ? (large + s) : (s + large))
                 + repeat(" ", rightPadding);
