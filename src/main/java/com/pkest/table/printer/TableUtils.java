@@ -17,10 +17,10 @@ public class TableUtils {
 
 
     public static List<String> splitStringByLength(String inputString, int length) {
+        int pos = 0;
         List<String> list = new ArrayList();
         AnsiString ansiString = new AnsiString(inputString);
         CharSequence plain = ansiString.getPlain();
-        int pos = 0;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < plain.length(); i++) {
             sb.append(plain.charAt(i));
