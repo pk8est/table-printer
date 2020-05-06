@@ -1,9 +1,13 @@
 package com.pkest.table.printer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.fusesource.jansi.AnsiString;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.max;
+import static jline.console.WCWidth.wcwidth;
 
 /**
  * @author 360733598@qq.com
@@ -13,33 +17,24 @@ public class TableUtils {
 
 
     public static List<String> splitStringByLength(String inputString, int length) {
-        int size = inputString.length() / length;
-        if (inputString.length() % length != 0) {
-            size += 1;
-        }
-        return splitStringByLength(inputString, length, size);
-    }
-
-
-    public static List<String> splitStringByLength(String inputString, int length, int size) {
         List<String> list = new ArrayList();
-        for (int index = 0; index < size; index++) {
-            String childStr = substring(inputString, index * length,
-                    (index + 1) * length);
-            list.add(childStr);
+        AnsiString ansiString = new AnsiString(inputString);
+        CharSequence plain = ansiString.getPlain();
+        int pos = 0;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < plain.length(); i++) {
+            sb.append(plain.charAt(i));
+            pos += max(wcwidth(plain.charAt(i)), 0);
+            if(pos >= length){
+                list.add(sb.toString());
+                sb = new StringBuilder();
+                pos = 0;
+            }
+        }
+        if(pos != 0){
+            list.add(sb.toString());
         }
         return list;
-    }
-
-
-    public static String substring(String str, int f, int t) {
-        if (f > str.length())
-            return null;
-        if (t > str.length()) {
-            return str.substring(f);
-        } else {
-            return str.substring(f, t);
-        }
     }
 
     public static String escape(String input, String encase, String replace){
