@@ -133,6 +133,8 @@ public class TablePrinter {
             if(data != null && data.size() > 0){
                 if(headers == null) headers = initHeader(data.get(0));
                 rows = initData(data, headers, setting);
+            }else if(headers == null){
+                headers = Lists.newArrayList(1);
             }
             if(setting.isShowNo()){
                 headers.add(0, setting.getSequenceName());
