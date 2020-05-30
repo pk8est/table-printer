@@ -289,18 +289,22 @@ public class TablePrinter {
             }
         } else if(row instanceof Map){
             Map map = (Map) row;
-            data.addAll((Collection) headers.stream()
-                    .map(e -> map.containsKey(e) ? map.get(e) : null)
-                    .collect(Collectors.toList()));
+            data.addAll(mapToCollection(map, headers));
         }else if(row == null || row instanceof String || TableUtils.isWrapClass(row.getClass())){
             data.add(row);
         }else{
-            data.addAll(new BeanMap(row).entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()));
+            data.addAll(mapToCollection(new BeanMap(row), headers));
         }
         if(setting.isShowNo()){
             data.add(0, rowIndex + 1);
         }
         return data;
+    }
+
+    protected Collection mapToCollection(Map map, List headers){
+        return (Collection) headers.stream()
+                .map(e -> map.containsKey(e) ? map.get(e) : null)
+                .collect(Collectors.toList());
     }
 
     protected List wordWrapValue(String str, TableSetting setting){
