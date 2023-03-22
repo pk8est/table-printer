@@ -334,9 +334,11 @@ public class TablePrinter {
         }
         if(rows != null && rows.size() > 0){
             for (List<?> row : rows) {
-                for (int i = 0; i < headers.size(); i++) {
-                    String s = formatValue(row.get(i), setting.getEncase(), setting);
-                    maxWidth[i] = setting.isEquilong() ? max(maxWidth[i], maxLineLength(s, setting)) : -1;
+                if(row != null){
+                    for (int i = 0; i < headers.size() && i < row.size(); i++) {
+                        String s = formatValue(row.get(i), setting.getEncase(), setting);
+                        maxWidth[i] = setting.isEquilong() ? max(maxWidth[i], maxLineLength(s, setting)) : -1;
+                    }
                 }
             }
         }
